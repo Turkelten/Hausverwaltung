@@ -1,0 +1,31 @@
+package Objects;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Inserat
+{
+    public int id;
+    public String titel;
+    public Haus haus;
+
+    public Inserat(int id, String titel, String beschreibung, float groesse, float zimmer, Boolean einbaukueche, float kaltmiete, float nebenkosten, int hausnummer, int plz, String ort, String strasse)
+    {
+        this.id = id;
+        this.titel = titel;
+        this.haus = new Haus(beschreibung, groesse, zimmer, einbaukueche, kaltmiete, nebenkosten, hausnummer, plz, ort, strasse);
+        
+    }
+
+    public Inserat(ResultSet result) throws SQLException
+    {
+        this.id = result.getInt("id");
+        
+    }
+
+	public int getId() {
+		return id;
+	}
+    
+}

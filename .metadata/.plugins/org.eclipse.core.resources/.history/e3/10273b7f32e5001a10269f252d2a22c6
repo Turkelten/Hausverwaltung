@@ -1,0 +1,9 @@
+package Objects;
+
+public class Adresse {
+	
+	public String ort;
+	public String strasse;
+	public int hausnummer;
+	public int plz;
+}

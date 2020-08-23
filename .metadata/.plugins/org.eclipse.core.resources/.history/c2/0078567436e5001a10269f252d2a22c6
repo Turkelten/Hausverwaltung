@@ -1,0 +1,82 @@
+package Objects;
+
+public class Haus {
+
+	public String beschreibung;
+	public float groesse;
+	public float zimmer;
+	public Boolean einbaukueche;
+	public float kaltmiete;
+	public float nebenkosten;
+	public Adresse adresse;
+	
+	public Haus(String beschreibung, float groesse, float zimmer, Boolean einbaukueche, float kaltmiete, float nebenkosten, int hausnummer, int plz, String ort, String strasse) {
+		
+		this.adresse = new Adresse(ort, strasse, hausnummer, plz);
+		this.beschreibung = beschreibung;
+		this.groesse = groesse;
+		this.zimmer = zimmer;
+		this.einbaukueche = einbaukueche;
+		this.kaltmiete = kaltmiete;
+		this.nebenkosten = nebenkosten;
+
+	}
+
+	public String getBeschreibung() {
+		return beschreibung;
+	}
+
+	public void setBeschreibung(String beschreibung) {
+		this.beschreibung = beschreibung;
+	}
+
+	public float getGroesse() {
+		return groesse;
+	}
+
+	public void setGroesse(float groesse) {
+		this.groesse = groesse;
+	}
+
+	public float getZimmer() {
+		return zimmer;
+	}
+
+	public void setZimmer(float zimmer) {
+		this.zimmer = zimmer;
+	}
+
+	public Boolean getEinbaukueche() {
+		return einbaukueche;
+	}
+
+	public void setEinbaukueche(Boolean einbaukueche) {
+		this.einbaukueche = einbaukueche;
+	}
+
+	public float getKaltmiete() {
+		return kaltmiete;
+	}
+
+	public void setKaltmiete(float kaltmiete) {
+		this.kaltmiete = kaltmiete;
+	}
+
+	public float getNebenkosten() {
+		return nebenkosten;
+	}
+
+	public void setNebenkosten(float nebenkosten) {
+		this.nebenkosten = nebenkosten;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+	
+	
+}

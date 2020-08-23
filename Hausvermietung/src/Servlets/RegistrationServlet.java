@@ -1,0 +1,78 @@
+package Servlets;
+
+import Objects.User;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import Controller.Controller;
+
+/**
+ * Servlet implementation class RegistrationServlet
+ */
+@WebServlet("/RegistrationServlet")
+public class RegistrationServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public RegistrationServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+
+		String firstName = request.getParameter("firstname");
+		String lastName = request.getParameter("lastname");
+		String userName = request.getParameter("username");
+		String password = request.getParameter("password");
+
+		User newUser = null;
+
+		try
+		{
+			newUser =	Controller.InsertUser(firstName, lastName, userName, password);
+		} catch (SQLException throwables)
+		{
+			throwables.printStackTrace();
+		}
+
+		String destPage = "login.jsp";
+
+		if(newUser != null)
+		{
+			//erfolg
+			destPage = "login.jsp";
+		}
+		else
+		{
+			//fehler
+			destPage = "fehler.jsp";
+		}
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
+		dispatcher.forward(request, response);
+	}
+
+}

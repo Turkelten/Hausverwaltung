@@ -1,0 +1,29 @@
+package Objects;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Inserat
+{
+    public int id;
+    public String titel;
+    public Haus haus;
+
+    public Inserat()
+    {
+        this.id = id;
+        
+    }
+
+    public Inserat(ResultSet result) throws SQLException
+    {
+        this.id = result.getInt("id");
+        
+    }
+
+	public int getId() {
+		return id;
+	}
+    
+}

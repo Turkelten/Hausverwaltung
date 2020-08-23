@@ -1,0 +1,152 @@
+package servlets;
+
+import Objects.Inserat;
+import Objects.User;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class InseratServlet
+ */
+@WebServlet("/InseratServlet")
+public class InseratServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public InseratServlet() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+		
+		String username = (String) session.getAttribute("username");
+		String function = (String) request.getParameter("button");
+		String id = (String) request.getParameter("inseratid");
+		String destPage = "login.jsp";
+		
+		
+		//User erstellen
+		User user = null;
+		try {
+			user = Controller.GetUser(username);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(user == null)
+		{
+			RequestDispatcher dispatcher = request.getRequestDispatcher("fehler.jsp");
+			dispatcher.forward(request, response);
+			
+		}
+		
+		//Parameter auslesen
+		String beschreibung = request.getParameter("beschreibung");
+		String marke = request.getParameter("marke");
+		String PS = request.getParameter("leistung");
+		String verbrauch = request.getParameter("verbrauch");
+		String groesse = request.getParameter("groesse");
+		String kilometerstand = request.getParameter("kmStand");
+		String Verbrauchsstoff = request.getParameter("motor");
+		String Bezeichnung = request.getParameter("bezeichnung");
+		String Ausstattung = request.getParameter("ausstattung");
+		
+		//Inserat erstellen
+		if(function.equals("create")) {
+	
+			//Inserat erstellen
+			Inserat newInserat = null;
+					
+			//Inserat in DB inserten
+			try
+			{
+				int iPS = Integer.parseInt(PS);
+				float fVerbrauch = Float.parseFloat(verbrauch);
+				int iGroesse = Integer.parseInt(groesse);
+				int iKilometer = Integer.parseInt(kilometerstand);
+	
+				//Controlleraufruf -> Daten werden in DB übertragen
+				newInserat = Controller.InsertInserat(beschreibung, marke, iPS, fVerbrauch, iGroesse, iKilometer, Verbrauchsstoff,
+						Bezeichnung, Ausstattung, user.id);
+			} catch (SQLException throwables)
+			{
+				//Fehler beim Inserten
+				destPage = "fehler.jsp";
+				throwables.printStackTrace();
+			}
+			catch (NumberFormatException numberFormatException)
+			{
+				//PS, Verbrauch, Groesse oder Kilometer im nicht valid (Buchstaben o.Ä)
+	
+			}
+			
+			//Erfolgreich
+			if(newInserat == null) {
+				//Auf Fehlerseite
+				destPage = "fehler.jsp";
+			}else {
+				//Auf Erfolgsseite
+				destPage = "userInseratSuccess.jsp";
+			}
+		
+		}
+		//Inserat ändern
+		if(function.equals("change")) {
+			int iid = Integer.parseInt(id);
+			int iPS = Integer.parseInt(PS);
+			float fVerbrauch = Float.parseFloat(verbrauch);
+			int iGroesse = Integer.parseInt(groesse);
+			int iKilometer = Integer.parseInt(kilometerstand);
+			
+			
+			try {
+				if(Controller.UpdateInserat(iid, beschreibung, marke, iPS, fVerbrauch, iGroesse, iKilometer, Verbrauchsstoff, Bezeichnung, Ausstattung))
+				{
+					//Klappt
+					destPage = "userprofil.jsp";
+					
+				}
+				else
+				{
+					//RIP
+					
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
+		dispatcher.forward(request, response);
+	}
+
+}
